@@ -155,7 +155,7 @@ fn test_create_token_without_metadata() {
     let symbol = String::from_str(&env, "SMPL");
     let decimals = 7u32;
     let initial_supply = 500_000_0000000i128;
-    let metadata_uri = None;
+    let metadata_uri: Option<String> = None;
 
     // Only base fee required when no metadata
     let expected_fee = base_fee;
@@ -238,7 +238,7 @@ fn test_create_token_invalid_parameters() {
     let symbol = String::from_str(&env, "TEST");
     let decimals = 7u32;
     let initial_supply = 1_000_000_0000000i128;
-    let metadata_uri = None;
+    let metadata_uri: Option<String> = None;
 
     // TODO: Uncomment once create_token is implemented
     // This should panic with InvalidParameters error
