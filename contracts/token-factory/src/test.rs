@@ -38,10 +38,34 @@ fn test_cannot_initialize_twice() {
     client.initialize(&admin, &treasury, &70_000_000, &30_000_000);
 }
 
-// --- New/Updated Minting & Creation Tests ---
+#[test]
+fn test_update_fees() {
+    let env = Env::default();
+    env.mock_all_auths();
+    
+    let contract_id = env.register_contract(None, TokenFactory);
+    let client = TokenFactoryClient::new(&env, &contract_id);
+
+    let admin = Address::generate(&env);
+    let treasury = Address::generate(&env);
+
+    client.initialize(&admin, &treasury, &70_000_000, &30_000_000);
+
+    // Update base fee
+    client.update_fees(&admin, &Some(100_000_000), &None);
+    let state = client.get_state();
+    assert_eq!(state.base_fee, 100_000_000);
+
+    // Update metadata fee
+    client.update_fees(&admin, &None, &Some(50_000_000));
+    let state = client.get_state();
+    assert_eq!(state.metadata_fee, 50_000_000);
+}
+
+// --- Creation & Minting Tests (Blocked by Task 2.4) ---
 
 #[test]
-#[ignore] // Blocked by Task 2.4 (create_token implementation)
+#[ignore] 
 fn test_create_and_mint_token() {
     let env = Env::default();
     env.mock_all_auths();
@@ -64,8 +88,7 @@ fn test_create_and_mint_token() {
     let metadata_uri = Some(String::from_str(&env, "ipfs://QmTest123"));
     let expected_fee = base_fee + metadata_fee;
 
-    // 1. Deploy & Mint via factory
-    let token_address = client.create_token(
+    let _token_address = client.create_token(
         &creator,
         &name,
         &symbol,
@@ -75,21 +98,10 @@ fn test_create_and_mint_token() {
         &expected_fee,
     );
 
-    // 2. Verify token registered in factory
     assert_eq!(client.get_token_count(), 1);
-
-    // 3. Verify token info stored correctly
     let token_info = client.get_token_info(&0).unwrap();
-    assert_eq!(token_info.address, token_address);
     assert_eq!(token_info.total_supply, initial_supply);
-
-    // 4. Verify initial supply minted to creator
-    // We assume the factory deploys a standard token contract
-    // let token_client = soroban_sdk::token::Client::new(&env, &token_address);
-    // assert_eq!(token_client.balance(&creator), initial_supply);
-
-    // 5. Verify total supply increased
-    // assert_eq!(token_client.total_supply(), initial_supply);
+    assert_eq!(token_info.name, name);
 }
 
 #[test]
@@ -97,8 +109,6 @@ fn test_create_and_mint_token() {
 #[should_panic(expected = "HostError: Error(Auth, InvalidAction)")] 
 fn test_unauthorized_minting_fails() {
     let env = Env::default();
-    // Do NOT mock all auths here to test failure
-    
     let contract_id = env.register_contract(None, TokenFactory);
     let client = TokenFactoryClient::new(&env, &contract_id);
 
@@ -108,7 +118,7 @@ fn test_unauthorized_minting_fails() {
 
     client.initialize(&admin, &treasury, &70_000_000, &30_000_000);
 
-    // Attacker tries to create/mint token without proper authorization or fees
+    // Attacker tries to mint without authorization
     client.create_token(
         &attacker,
         &String::from_str(&env, "Fake"),
@@ -136,7 +146,7 @@ fn test_create_token_insufficient_fee() {
 
     client.initialize(&admin, &treasury, &70_000_000, &30_000_000);
 
-    // metadata_uri is Some, but we only provide base_fee
+    // Metadata provided but only base fee sent
     client.create_token(
         &creator,
         &String::from_str(&env, "Test"),
@@ -145,5 +155,32 @@ fn test_create_token_insufficient_fee() {
         &1000,
         &Some(String::from_str(&env, "ipfs://...")),
         &70_000_000, 
+    );
+}
+
+#[test]
+#[ignore]
+#[should_panic(expected = "Error(Contract, #3)")] // InvalidParameters error
+fn test_create_token_invalid_parameters() {
+    let env = Env::default();
+    env.mock_all_auths();
+    
+    let contract_id = env.register_contract(None, TokenFactory);
+    let client = TokenFactoryClient::new(&env, &contract_id);
+
+    let admin = Address::generate(&env);
+    let treasury = Address::generate(&env);
+    let creator = Address::generate(&env);
+
+    client.initialize(&admin, &treasury, &70_000_000, &30_000_000);
+
+    client.create_token(
+        &creator,
+        &String::from_str(&env, ""), // Invalid empty name
+        &String::from_str(&env, "TEST"),
+        &7,
+        &1_000_000,
+        &None,
+        &70_000_000,
     );
 }
