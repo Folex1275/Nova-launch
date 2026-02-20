@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '../UI/Button';
 import { TokenCard } from './TokenCard';
+import { NoTokensEmptyState, NoWalletEmptyState } from '../UI';
 import type { TokenInfo, WalletState } from '../../types';
 
 interface TokenListProps {
@@ -33,11 +34,7 @@ export function TokenList({ wallet }: TokenListProps) {
     }, [wallet.address, wallet.connected]);
 
     if (!wallet.connected) {
-        return (
-            <div className="text-center py-12">
-                <p className="text-gray-600">Connect your wallet to view deployed tokens</p>
-            </div>
-        );
+        return <NoWalletEmptyState />;
     }
 
     if (loading) {
@@ -50,12 +47,7 @@ export function TokenList({ wallet }: TokenListProps) {
     }
 
     if (tokens.length === 0) {
-        return (
-            <div className="text-center py-12">
-                <p className="text-gray-600 mb-4">No tokens deployed yet</p>
-                <p className="text-sm text-gray-500">Deploy your first token to get started!</p>
-            </div>
-        );
+        return <NoTokensEmptyState />;
     }
 
     return (
