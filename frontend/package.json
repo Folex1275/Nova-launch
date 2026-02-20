@@ -11,7 +11,9 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage --run"
+    "test:coverage": "vitest --coverage --run",
+    "test:coverage:watch": "vitest --coverage",
+    "coverage:report": "vitest --coverage --run && open coverage/index.html || xdg-open coverage/index.html"
   },
   "dependencies": {
     "@stellar/freighter-api": "^6.0.1",
