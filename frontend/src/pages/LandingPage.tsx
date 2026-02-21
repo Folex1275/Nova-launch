@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import { Hero } from "../components/landing";
+import { Hero, HowItWorks } from "../components/landing";
 import { LANDING_SECTION_IDS } from "../components/landing/sectionIds";
 import { WalletInfo } from "../components/WalletConnect";
 import { Button } from "../components/UI";
@@ -171,6 +171,7 @@ export default function LandingPage({
         disconnect={disconnect}
         isConnecting={isConnecting}
       />
+      <HowItWorks />
     </main>
   );
 }
