@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { Button } from "../UI/Button";
-import { TokenCard } from "./TokenCard";
-import { transactionHistoryStorage } from "../../services/TransactionHistoryStorage";
-import type { TokenInfo, WalletState } from "../../types";
+import { useState, useEffect } from 'react';
+import { Button } from '../UI/Button';
+import { TokenCard } from './TokenCard';
+import { NoTokensEmptyState, NoWalletEmptyState } from '../UI';
+import type { TokenInfo, WalletState } from '../../types';
 
 interface TokenListProps {
   wallet: WalletState;
@@ -15,14 +15,26 @@ export function TokenList({ wallet }: TokenListProps) {
   const loadTokens = async () => {
     if (!wallet.connected || !wallet.address) return;
 
-    setLoading(true);
-    try {
-      const tokens = transactionHistoryStorage.getTokens(wallet.address);
-      setTokens(tokens);
-    } catch (error) {
-      console.error("Failed to load tokens:", error);
-    } finally {
-      setLoading(false);
+        setLoading(true);
+        try {
+            // Load from localStorage for now
+            const stored = localStorage.getItem(`tokens_${wallet.address}`);
+            if (stored) {
+                setTokens(JSON.parse(stored));
+            }
+        } catch (error) {
+            console.error('Failed to load tokens:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadTokens();
+    }, [wallet.address, wallet.connected]);
+
+    if (!wallet.connected) {
+        return <NoWalletEmptyState />;
     }
   };
 
@@ -30,15 +42,9 @@ export function TokenList({ wallet }: TokenListProps) {
     loadTokens();
   }, [wallet.address, wallet.connected]);
 
-  if (!wallet.connected) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-600">
-          Connect your wallet to view deployed tokens
-        </p>
-      </div>
-    );
-  }
+    if (tokens.length === 0) {
+        return <NoTokensEmptyState />;
+    }
 
   if (loading) {
     return (
