@@ -99,3 +99,6 @@ mod supply_conservation_test;
 
 #[cfg(test)]
 mod fee_validation_test;
+
+#[cfg(test)]
+mod atomic_token_creation_test;
