@@ -7,3 +7,4 @@ export {
 
 export { BurnNotificationDemo } from './BurnNotificationDemo';
 export { BurnButton } from './BurnButton';
+export { BurnConfirmationModal } from './BurnConfirmationModal';
