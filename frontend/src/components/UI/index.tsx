@@ -9,6 +9,7 @@ export { Skeleton, SkeletonCard } from './Skeleton';
 export { Modal } from './Modal';
 export { ImageUpload } from './ImageUpload';
 export { EmptyState, EmptyStateIcons } from './EmptyState';
+export { FireIcon } from './Icons';
 export {
     NoTokensEmptyState,
     NoWalletEmptyState,

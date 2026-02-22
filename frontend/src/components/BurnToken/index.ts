@@ -6,3 +6,4 @@ export {
 } from './BurnNotification';
 
 export { BurnNotificationDemo } from './BurnNotificationDemo';
+export { BurnButton } from './BurnButton';
