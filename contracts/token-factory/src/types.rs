@@ -18,26 +18,23 @@ pub struct TokenInfo {
     pub symbol: String,
     pub decimals: u32,
     pub total_supply: i128,
-    pub total_burned: i128,
     pub metadata_uri: Option<String>,
     pub created_at: u64,
-    pub total_burned: i128,     // Total amount of tokens burned
-    pub burn_count: u32,        // Number of burn operations
-    pub clawback_enabled: bool, // Whether admin can burn from any address
-    pub total_burned: i128,     // Total amount of tokens burned
-    pub burn_count: u32,        // Number of burn operations
+    pub total_burned: i128,
+    pub burn_count: u32,
+    pub clawback_enabled: bool,
 }
 
 #[contracttype]
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DataKey {
     Admin,
     Treasury,
     BaseFee,
     MetadataFee,
     TokenCount,
-    Token(u32),              // Token index -> TokenInfo
-    TokenByAddress(Address), // Token address -> TokenInfo (for quick lookup)
+    Token(u32),
+    TokenByAddress(Address),
 }
 
 #[contracterror]
