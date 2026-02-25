@@ -2,6 +2,7 @@
 
 mod events;
 mod storage;
+mod burn;
 mod types;
 
 use soroban_sdk::{contract, contractimpl, Address, Env};
@@ -373,6 +374,23 @@ impl TokenFactory {
 
         Ok(())
     }
+
+    pub fn burn(env: Env, caller: Address, token_index: u32, amount: i128) -> Result<(), Error> {
+        burn::burn(&env, caller, token_index, amount)
+    }
+
+    pub fn admin_burn(env: Env, admin: Address, token_index: u32, holder: Address, amount: i128) -> Result<(), Error> {
+        burn::admin_burn(&env, admin, token_index, holder, amount)
+    }
+
+    pub fn batch_burn(env: Env, admin: Address, token_index: u32, burns: soroban_sdk::Vec<(Address, i128)>) -> Result<(), Error> {
+        burn::batch_burn(&env, admin, token_index, burns)
+    }
+
+    pub fn get_burn_count(env: Env, token_index: u32) -> u32 {
+        burn::get_burn_count(&env, token_index)
+    }
+
 }
 
 // Temporarily disabled - requires create_token implementation
@@ -401,4 +419,6 @@ mod pause_test;
 mod fuzz_update_fees;
 
 #[cfg(test)]
+mod token_registry_test;
+
 mod update_fees_regression_test;
