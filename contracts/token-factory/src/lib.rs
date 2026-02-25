@@ -419,6 +419,10 @@ mod pause_test;
 mod fuzz_update_fees;
 
 #[cfg(test)]
-mod token_registry_test;
+mod burn_property_test;
 
-mod update_fees_regression_test;
+#[cfg(test)]
+mod fuzz_string_boundaries;
+
+#[cfg(test)]
+mod fuzz_numeric_boundaries;
