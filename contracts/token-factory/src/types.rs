@@ -14,6 +14,16 @@ pub struct FactoryState {
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ContractMetadata {
+    pub name: String,
+    pub description: String,
+    pub author: String,
+    pub license: String,
+    pub version: String,
+}
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TokenInfo {
     pub address: Address,
     pub creator: Address,
@@ -48,6 +58,9 @@ pub enum DataKey {
     Token(u32),
     Balance(u32, Address),
     BurnCount(u32),
+    Token(u32),            // Token index -> TokenInfo
+    Balance(u32, Address), // (token_index, holder) -> i128
+    BurnCount(u32),        // token_index -> u32
     TokenByAddress(Address),
     Paused,
 }
@@ -69,4 +82,11 @@ pub enum Error {
     InvalidBurnAmount = 12,
     BurnAmountExceedsBalance = 13,
     ContractPaused = 14,
+    InvalidAmount = 8,
+    ClawbackDisabled = 9,
+    InvalidBurnAmount = 10,
+    BurnAmountExceedsBalance = 11,
+    ContractPaused = 12,
+    ArithmeticError = 13,
+    BatchTooLarge = 14,
 }
