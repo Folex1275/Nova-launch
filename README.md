@@ -500,6 +500,24 @@ Get current factory state.
 pub fn get_state(env: Env) -> FactoryState
 ```
 
+##### `get_base_fee`
+Get the current base fee for token deployment.
+
+```rust
+pub fn get_base_fee(env: Env) -> i128
+```
+
+Returns the base fee amount in stroops that must be paid for any token deployment, regardless of metadata inclusion.
+
+##### `get_metadata_fee`
+Get the current metadata fee for token deployment.
+
+```rust
+pub fn get_metadata_fee(env: Env) -> i128
+```
+
+Returns the additional fee amount in stroops that must be paid when deploying a token with metadata (IPFS URI).
+
 ##### `get_token_info`
 Get information about a deployed token.
 

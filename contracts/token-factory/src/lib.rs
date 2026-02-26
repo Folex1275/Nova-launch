@@ -46,6 +46,20 @@ impl TokenFactory {
         storage::get_factory_state(&env)
     }
 
+    /// Get the current base fee for token deployment
+    /// 
+    /// Returns the base fee amount in stroops that must be paid
+    /// for any token deployment, regardless of metadata inclusion.
+    pub fn get_base_fee(env: Env) -> i128 {
+        storage::get_base_fee(&env)
+    }
+
+    /// Get the current metadata fee for token deployment
+    /// 
+    /// Returns the additional fee amount in stroops that must be paid
+    /// when deploying a token with metadata (IPFS URI).
+    pub fn get_metadata_fee(env: Env) -> i128 {
+        storage::get_metadata_fee(&env)
     /// Transfer admin rights to a new address
     ///
     /// Allows the current admin to transfer administrative control to a new address.
