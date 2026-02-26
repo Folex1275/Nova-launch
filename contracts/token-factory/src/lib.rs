@@ -333,3 +333,6 @@ mod fuzz_update_fees;
 
 #[cfg(test)]
 mod update_fees_regression_test;
+
+#[cfg(test)]
+mod security_test;
