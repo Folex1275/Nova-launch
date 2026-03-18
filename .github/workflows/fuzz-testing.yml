@@ -9,9 +9,9 @@ on:
     branches: [ main, develop ]
     paths:
       - 'contracts/**'
-  schedule:
+  # schedule:
     # Run nightly at 2 AM UTC
-    - cron: '0 2 * * *'
+    # - cron: '0 2 * * *'
 
 jobs:
   fuzz-test:
