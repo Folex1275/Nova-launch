@@ -5,9 +5,9 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
-  schedule:
+  # schedule:
     # Run accessibility tests daily at 2 AM UTC
-    - cron: '0 2 * * *'
+    # - cron: '0 2 * * *'
 
 jobs:
   accessibility-tests:
